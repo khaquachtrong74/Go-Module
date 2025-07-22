@@ -1,4 +1,4 @@
-package gomodule
+package utils
 import "fmt"
 func Wrap(err error, context string) error {
 	if err != nil{
