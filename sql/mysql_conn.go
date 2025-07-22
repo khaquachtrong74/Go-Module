@@ -1,18 +1,20 @@
-package mysql
+package sql
 
 import (
 	"database/sql"
-	"log"
 	"os"
 	"sync"
 	"time"
 	"github.com/go-sql-driver/mysql"
-)
-var(
-	one sync.Once
+	"github.com/khaquachtrong74/Go-Module/utils"
 )
 
-var	DBManager *sql.DB
+var(
+	initOnce sync.Once
+	DBManager *sql.DB
+	err error
+)
+
 var Cfg mysql.Config = mysql.Config{
 	User: os.Getenv("DBUsername"),
 	Passwd: os.Getenv("DBPassword"),
@@ -22,13 +24,13 @@ var Cfg mysql.Config = mysql.Config{
 	ParseTime: true,
 	AllowNativePasswords: true,
 }
+// Init connect one time - singleton
 func InitDB()(*sql.DB, error){
-	var err error
-	one.Do(func(){
-		print(1)
+	initOnce.Do(func(){
 		DBManager, err = sql.Open("mysql", Cfg.FormatDSN());
 		if err != nil{
-			log.Panic("Cann't connect DB: ", err)
+			err = utils.ErrorWrap(err, "Failed to connect DB")
+			return 
 		}
 		DBManager.SetConnMaxLifetime(time.Minute*3)
 		DBManager.SetMaxOpenConns(10)
@@ -36,10 +38,11 @@ func InitDB()(*sql.DB, error){
 	})
 	return DBManager, err
 }
-func CloseDB()error {
+
+func CloseDB() error {
 	if DBManager == nil{
-		return nil}
-	print("Close here")
+		return nil
+	}
 	return DBManager.Close()
 }
 
