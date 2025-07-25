@@ -11,3 +11,6 @@ type Attribute struct{
 	Id int
 	Content string
 }
+func GetContent(attr Attribute)string{
+	return attr.Content
+}
