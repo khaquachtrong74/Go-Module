@@ -21,3 +21,6 @@ func QueryAttributes(db *sql.DB, tableName string, query string)([]Attribute, er
 	}
 	return result, nil
 }
+func GetContent(attr Attribute)string{
+	return attr.Content
+}
