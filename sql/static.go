@@ -8,6 +8,6 @@ type Table struct{
 	tableName string
 }
 type Attribute struct{
-	id int
-	content string
+	Id int
+	Content string
 }

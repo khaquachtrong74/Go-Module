@@ -14,7 +14,7 @@ func QueryAttributes(db *sql.DB, tableName string, query string)([]Attribute, er
 	var result []Attribute
 	for rows.Next(){
 		var attr Attribute
-		if err := rows.Scan(&attr.id, &attr.content); err != nil{
+		if err := rows.Scan(&attr.Id, &attr.Content); err != nil{
 			return nil, utils.ErrorWrap(err, "scan failed!")
 		}
 		result = append(result, attr)
